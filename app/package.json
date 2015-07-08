@@ -1,0 +1,16 @@
+{
+  "name": "FlipSide",
+  "version": "0.0.1",
+  "description": "prototype multi-exchange-trading-platform",
+  "main": "main.html",
+  "window": {
+    "width": 400,
+    "height": 520,
+    "show": true,
+    "title": "FlipSide",
+    "toolbar": true
+  },
+  "dependencies": {
+    "coinbase-exchange": "^0.2.0"
+  }
+}
