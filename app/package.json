@@ -1,16 +1,21 @@
 {
   "name": "FlipSide",
+  "productName": "FlipSide",
   "version": "0.0.1",
   "description": "prototype multi-exchange-trading-platform",
   "main": "main.html",
   "window": {
-    "width": 400,
-    "height": 520,
+    "width": 1000,
+    "height": 600,
+    "min_width": 800,
+    "min_height": 400,
     "show": true,
     "title": "FlipSide",
-    "toolbar": true
+    "toolbar": true,
+    "position": "center"
   },
   "dependencies": {
-    "coinbase-exchange": "^0.2.0"
+    "coinbase-exchange": "^0.2.0",
+    "fs-jetpack": "^0.6.4"
   }
 }

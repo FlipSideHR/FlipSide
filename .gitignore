@@ -6,3 +6,7 @@ nw-sample-apps-master/
 .grunt
 build/
 dist/
+releases/
+*.log
+.DS_Store
+Thumbs.db

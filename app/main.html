@@ -6,7 +6,7 @@
     BTC-USD: <span id="last-trade"></span>
 
     <script>
-      var ticker = require("./modules/ticker");
+      var ticker = require("./lib/ticker");
       var el = document.getElementById("last-trade");
       ticker.bindTo(el);
     </script>
