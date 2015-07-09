@@ -1,0 +1,8 @@
+tmp/
+app/node_modules/
+node_modules/
+nwjs/
+nw-sample-apps-master/
+.grunt
+build/
+dist/
