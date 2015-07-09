@@ -6,7 +6,7 @@
 
   - __Product Owner__: Michael Symmes
   - __Scrum Master__: Dick Treichel
-  - __Development Team Members__: Mokhtar Naamani, Amy Li, Simon Burns
+  - __Development Team Members__: Mokhtar Naamani, Amy Li, Simon Burns, Michael Symmes, Dick Treichel
 
 ## Usage
 Clone the repo and enter the directory then issue the following commands:
