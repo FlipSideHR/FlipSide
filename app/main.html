@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link href="./stylesheets/main.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    BTC-USD: <span id="last-trade"></span>
+    BTC-USD: <span id="last-trade" class="ticker"></span>
 
     <script>
-      var ticker = require("./modules/ticker");
+      var ticker = require("./lib/ticker");
       var el = document.getElementById("last-trade");
       ticker.bindTo(el);
     </script>

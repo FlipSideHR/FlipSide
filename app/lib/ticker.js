@@ -7,6 +7,7 @@ publicClient.productID = "BTC-USD";
 //bind a DOM element's innerHTML value to latest ticker value
 module.exports.bindTo = function(el){
   //real-time update
+
   websocket.on('message', function(data) {
     if(el && data.reason === "filled"){
       el.innerHTML = data.price;
@@ -15,7 +16,7 @@ module.exports.bindTo = function(el){
 
   //last known market price
   publicClient.getProductTicker(function(err, resp, data){
-    console.log(data);
-    el.innerHTML = data.price;
+    if(el && !err && data) el.innerHTML = data.price;
   });
+
 };
