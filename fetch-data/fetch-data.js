@@ -16,9 +16,4 @@ DataFetcher.prototype.streamTo = function(callback) {
   this.exchangeAdapter.streamTo(callback);
 };
 
-// "Test suite" for a Coinbase DataFetcher
-var coinbaseFetcher = new DataFetcher('coinbase');
-
-coinbaseFetcher.streamTo(function(data) {
-  console.log(data);
-});
+module.exports = DataFetcher;
