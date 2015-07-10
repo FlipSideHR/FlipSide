@@ -6,7 +6,13 @@
   </div>
   <div id="openOrdersBox">
     <h5>Orders:</h5>
-    <div id="orders"><p>Test Order!</p></div>
+    <div id="orders" ng-repeat="o in ordersList">
+      <pre>{{o}}</pre>
+    </div>
   </div>
   <div id="walletsBox">
+    <h5>Wallets:</h5>
+    <div id="wallet" ng-repeat="wallet in wallets">
+      <pre>{{wallet}}</pre>
+    </div>
   </div>
