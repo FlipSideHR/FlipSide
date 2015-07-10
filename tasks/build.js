@@ -18,6 +18,7 @@ var paths = {
         'app/node_modules/**',
         'app/bower_components/**',
         'app/vendor/**',
+        'app/app.js',
         'app/**/*.html'
     ],
 }

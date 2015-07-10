@@ -1,6 +1,5 @@
 tmp/
-app/node_modules/
-node_modules/
+**/node_modules/
 nwjs/
 nw-sample-apps-master/
 .grunt
@@ -10,3 +9,4 @@ releases/
 *.log
 .DS_Store
 Thumbs.db
+**/bower_components
