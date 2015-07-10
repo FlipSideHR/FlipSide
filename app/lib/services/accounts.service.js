@@ -93,11 +93,21 @@ angular.module('flipside.accountsService', [])
    
     };
 
+    var cancel = function(id, callback){
+     authedClient.cancelOrder(id, function(err, res, data){
+       if (err){
+         console.error(err);
+       }
+       callback(data);
+     }); 
+    };
+
     // construct our return object
     return {
       fetchWallets: fetchWallets,
       fetchOrders: fetchOrders,
       buy: buy,
-      sell: sell
+      sell: sell,
+      cancel: cancel
     };
   }]);

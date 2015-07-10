@@ -7,7 +7,7 @@
   <div id="openOrdersBox">
     <h5>Orders:</h5>
     <div id="orders" ng-repeat="o in ordersList">
-      <pre>{{o}}</pre>
+      <pre>{{o}}<button ng-click="cancel(o.id)">X</button></pre>
     </div>
   </div>
   <div id="walletsBox">

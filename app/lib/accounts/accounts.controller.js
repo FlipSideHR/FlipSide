@@ -7,6 +7,12 @@ angular.module('flipside.accounts', [])
     $scope.wallets = [];    
     $scope.ordersList = [];
 
+    $scope.cancel = function(id){
+      console.log('canceling order: ', id);
+      AccountsService.cancel(id, function(result){
+        console.log(result); 
+      });
+    };
 
     $interval(function(){
       AccountsService.fetchWallets(function(wallets){
