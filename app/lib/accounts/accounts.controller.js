@@ -7,16 +7,17 @@ angular.module('flipside.accounts', [])
     $scope.wallets = [];    
     $scope.ordersList = [];
 
-    AccountsService.fetchWallets(function(wallets){
-      $scope.wallets = wallets;                            
-    });
 
-    AccountsService.fetchOrders(function(orders){
-      console.log(orders.list);
-      $scope.ordersList = orders.list;                            
-      console.log($scope.ordersList);
-    });
+    $interval(function(){
+      AccountsService.fetchWallets(function(wallets){
+        $scope.wallets = wallets;                            
+      });
 
+      AccountsService.fetchOrders(function(orders){
+        $scope.ordersList = orders.list;                            
+      });
+    }, 500);
+      
     $scope.buy = function(){
       AccountsService.buy($scope.order.price, $scope.order.size);
     };
