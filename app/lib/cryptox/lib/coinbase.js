@@ -4,6 +4,7 @@ var moment = require("moment");
 var CoinbaseExchange = require("coinbase-exchange");
 var publicClient = new CoinbaseExchange.PublicClient();
 var _ = require("underscore");
+var async = require("async");
 
 publicClient.productID = "BTC-USD";
 
@@ -159,8 +160,33 @@ function CoinBase (options) {
             data: []
         };
         privateClient.getAccounts(function(err, response, accounts){
+          if (err) callback(err, transactions);
 
-          callback(err, transactions);
+          async.eachSeries(accounts, function(account, next){
+            privateClient.getAccountHistory(account.id, function(err, response, history){
+              if(!history.length) return next();
+              /*console.log(account, history);
+              _.each(history, function(transaction){
+                transactions.data.push({
+                    "tx_id": transaction.id.toString(),
+                    "datetime": transaction.created_at,
+                    "type": "sell",
+                    "symbol": "XBTUSD",
+                    "amount_base": -0.30183411,
+                    "amount_counter": 72.62,
+                    "rate": 240.6,
+                    "fee_base": 0,
+                    "fee_counter": 0.15,
+                    "order_id": "58025817",
+                    "add_info": ""
+                });
+              });
+              */
+              next();
+            });
+          }, function(err){
+            callback(err, transactions);
+          });
         });
 
     };
