@@ -3,7 +3,7 @@ tmp/
 **/bower_components
 .jshintrc
 # herp derp
-app/lib/accounts/credentials
+app/lib/accounts/credentials/
 nwjs/
 nw-sample-apps-master/
 .grunt
