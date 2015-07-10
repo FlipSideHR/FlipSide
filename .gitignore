@@ -1,6 +1,9 @@
 tmp/
-app/node_modules/
-node_modules/
+**/node_modules/
+**/bower_components
+.jshintrc
+# herp derp
+app/lib/accounts/credentials/
 nwjs/
 nw-sample-apps-master/
 .grunt
