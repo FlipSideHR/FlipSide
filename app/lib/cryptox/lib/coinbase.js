@@ -3,6 +3,7 @@
 var moment = require("moment");
 var CoinbaseExchange = require("coinbase-exchange");
 var publicClient = new CoinbaseExchange.PublicClient();
+var _ = require("underscore");
 
 publicClient.productID = "BTC-USD";
 
@@ -51,7 +52,7 @@ function CoinBase (options) {
             return callback(new Error(err || "NotFound"), ticker);
           }
 
-          ticker.timestamp = util.timestamp(coinbaseTicker.time);
+          ticker.timestamp = coinbaseTicker.time;
 
           var data = {
             pair: self.properties.instruments[0].pair,
@@ -65,25 +66,74 @@ function CoinBase (options) {
     };
 
     self.getOrderBook = function (options, callback) {
-        var orderBook;
-        var err = new Error("Method not implemented");
-        orderBook = {
+        var orderBook = {
             timestamp: util.timestampNow(),
-            error: err.message,
+            error: "",
             data: []
         };
-        callback(err, orderBook);
+
+        if(options.pair && options.pair != "XBTUSD") {
+          orderBook.error = "Unsupported Ticker";
+          return callback(new Error("NotFound"), orderBook);
+        }
+
+        publicClient.getProductOrderBook({level:3}, function(err, resp, data){
+
+          if(err || data.message == "NotFound") {
+            return callback(new Error(err || "NotFound"), orderBook);
+          }
+
+          data.pair = self.properties.instruments[0].pair;
+
+          data.asks = _.map(data.asks, function(ask){
+            return {
+              price: ask[0],
+              volume: ask[1]
+            };
+          });
+
+          data.bids = _.map(data.bids, function(bid){
+            return {
+              price: bid[0],
+              volume: bid[1]
+            }
+          });
+
+          orderBook.data.push(data);
+          callback(err, orderBook);
+        });
+
     };
 
     self.getTrades = function (options, callback) {
         var trades;
-        var err = new Error("Method not implemented");
         trades = {
             timestamp: util.timestampNow(),
-            error: err.message,
+            error: "",
             data: []
         };
-        callback(err, trades);
+
+        publicClient.getProductTrades({}, function(err, resp, coinbaseTrades){
+          var data = {
+            pair: self.properties.instruments[0].pair,
+          };
+
+          data.buys = _.chain(coinbaseTrades).filter(function(trade){
+            return trade.side === 'buy';
+          }).map(function(trade){
+            return { price: trade.price, volume: trade.size, timestamp: trade.time };
+          }).value();
+
+          data.sells = _.chain(coinbaseTrades).filter(function(trade){
+            return trade.side === 'sell';
+          }).map(function(trade){
+            return { price: trade.price, volume: trade.size, timestamp: trade.time };
+          }).value();
+
+          trades.data.push(data);
+
+          callback(err, trades);
+        });
     };
 
     self.getFee = function (options, callback) {
@@ -168,9 +218,9 @@ CoinBase.prototype.properties = {
     name: "Coinbase",              // Proper name of the exchange/provider
     slug: "coinbase",               // slug name of the exchange. Needs to be the same as the .js filename
     methods: {
-        notImplemented: ["getOrderBook", "getTrades", "getFee", "getTransactions",
+        notImplemented: ["getTransactions",
             "getBalance", "getOpenOrders", "postSellOrder", "postBuyOrder", "cancelOrder", "getLendBook", "getActiveOffers", "postOffer", "cancelOffer"],
-        notSupported: []
+        notSupported: ["getFee"]
     },
     instruments: [                  // all allowed currency/asset combinatinos (pairs) that form a market
         {
