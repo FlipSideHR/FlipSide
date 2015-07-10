@@ -13,6 +13,10 @@ function CoinBase (options) {
     var self = this;
     self["options"] = options;
 
+    var apiUri = options.sandbox ? 'https://api-public.sandbox.exchange.coinbase.com' : undefined;
+    var privateClient = new CoinbaseExchange.AuthenticatedClient(
+         options.key, options.secret, options.passphrase, apiUri);
+
     self.getRate = function (options, callback) {
         self.getTicker(options, function(err, ticker) {
             var rate, data;
@@ -87,15 +91,15 @@ function CoinBase (options) {
 
           data.asks = _.map(data.asks, function(ask){
             return {
-              price: ask[0],
-              volume: ask[1]
+              price: parseFloat(ask[0]),
+              volume: parseFloat(ask[1])
             };
           });
 
           data.bids = _.map(data.bids, function(bid){
             return {
-              price: bid[0],
-              volume: bid[1]
+              price: parseFloat(bid[0]),
+              volume: parseFloat(bid[1])
             }
           });
 
@@ -121,13 +125,13 @@ function CoinBase (options) {
           data.buys = _.chain(coinbaseTrades).filter(function(trade){
             return trade.side === 'buy';
           }).map(function(trade){
-            return { price: trade.price, volume: trade.size, timestamp: trade.time };
+            return { price: parseFloat(trade.price), volume: parseFloat(trade.size), timestamp: trade.time };
           }).value();
 
           data.sells = _.chain(coinbaseTrades).filter(function(trade){
             return trade.side === 'sell';
           }).map(function(trade){
-            return { price: trade.price, volume: trade.size, timestamp: trade.time };
+            return { price: parseFloat(trade.price), volume: parseFloat(trade.size), timestamp: trade.time };
           }).value();
 
           trades.data.push(data);
@@ -149,24 +153,47 @@ function CoinBase (options) {
 
     self.getTransactions = function (options, callback) {
         var transactions;
-        var err = new Error("Method not implemented");
         transactions = {
             timestamp: util.timestampNow(),
-            error: err.message,
+            error: "",
             data: []
         };
-        callback(err, transactions);
+        privateClient.getAccounts(function(err, response, accounts){
+
+          callback(err, transactions);
+        });
+
     };
 
     self.getBalance = function (options, callback) {
         var balance;
-        var err = new Error("Method not implemented");
         balance = {
             timestamp: util.timestampNow(),
-            error: err.message,
+            error: "",
             data: []
         };
-        callback(err, balance);
+        privateClient.getAccounts(function(err, response, accounts){
+          _.each(accounts, function(account){
+            var data = {
+              account_id: account.id,
+              total: [],
+              available: []
+            }
+
+            data.total = [{currency: account.currency === "BTC" ? "XBT" : account.currency,
+                amount: parseFloat(account.balance)
+            }];
+
+            data.available = [{
+                currency: account.currency === "BTC" ? "XBT" : account.currency,
+                amount: parseFloat(account.available)
+            }];
+
+            balance.data.push(data);
+          });
+
+          callback(err, balance);
+        });
     };
 
     self.getOpenOrders = function (options, callback) {
@@ -218,8 +245,7 @@ CoinBase.prototype.properties = {
     name: "Coinbase",              // Proper name of the exchange/provider
     slug: "coinbase",               // slug name of the exchange. Needs to be the same as the .js filename
     methods: {
-        notImplemented: ["getTransactions",
-            "getBalance", "getOpenOrders", "postSellOrder", "postBuyOrder", "cancelOrder", "getLendBook", "getActiveOffers", "postOffer", "cancelOffer"],
+        notImplemented: ["getOpenOrders", "postSellOrder", "postBuyOrder", "cancelOrder", "getLendBook", "getActiveOffers", "postOffer", "cancelOffer"],
         notSupported: ["getFee"]
     },
     instruments: [                  // all allowed currency/asset combinatinos (pairs) that form a market
