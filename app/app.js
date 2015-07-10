@@ -1,7 +1,8 @@
 // Declare app level module which depends on views, and components
 angular.module('flipside', [
   'ngRoute',
-  'flipside.accounts'
+  'flipside.accounts',
+  'flipside.accountsService'
 ])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider

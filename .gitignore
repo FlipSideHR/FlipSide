@@ -1,5 +1,9 @@
 tmp/
 **/node_modules/
+**/bower_components
+.jshintrc
+# herp derp
+app/lib/accounts/credentials
 nwjs/
 nw-sample-apps-master/
 .grunt
@@ -9,4 +13,3 @@ releases/
 *.log
 .DS_Store
 Thumbs.db
-**/bower_components
