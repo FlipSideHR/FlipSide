@@ -1,7 +1,6 @@
 var Cryptox = require("./index.js");
 
-//var exchanges = ["coinbase", "btce", "bitfinex","bitstamp","bitx","oxr"].map(function(slug){
-var exchanges = ["coinbase"].map(function(slug){
+var exchanges = ["coinbase", "btce", "bitfinex","bitstamp","bitx"].map(function(slug){
   return new Cryptox(slug);
 });
 
